@@ -1,0 +1,25 @@
+{
+  "cli": {
+    "version": ">= 4.1.2"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "distribution": "internal"
+    },
+    "production": {
+      "android": {
+        "buildType": "apk" // .apk 파일로 빌드하기 위해 사용합니다.
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

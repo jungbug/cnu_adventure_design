@@ -1,0 +1,40 @@
+name: Deploy React Native App with Expo
+
+on:
+  push:
+    branches:
+      - deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: CHECKOUT
+        uses: actions/checkout@v2
+
+      - name: Set up 
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Install Expo CLI
+        run: yarn global add expo-cli
+
+      - name: Install EAS CLI
+        run: yarn global add eas-cli
+
+      - name: Log in to Expo
+        run: expo login -u ${{secrets.EXPO_USERNAME}} -p ${{secrets.EXPO_PASSWORD}} --non-interactive
+
+      - name: Build and Publish with EAS for Android
+        run: eas build --platform android --profile preview
+
+      - name: Update with EAS
+        run: eas update
