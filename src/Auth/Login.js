@@ -37,12 +37,8 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
 
     setIsLoading(true);
 
-    const queryParams = new URLSearchParams({
-      id: id,
-      pw: pw
-    });
-    const url = api_uri + `/api/v1/user/login?${queryParams}`;
-    const url2 = api_uri + `/api/v1/user/list`;
+    const url = "https://278e-168-188-130-181.ngrok-free.app/team3/login";
+    const url2 = api_uri + `/team3/login`;
 
     try {
       const response = await fetch(url, {
@@ -51,12 +47,14 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
 
       setIsLoading(false);
 
+
       const responseJson = await response.json();
 
       if (response.status === 200) {
-        const responseurl2 = await fetch(url2, {
+        const responseurl2 = await fetch(url, {
           method: 'GET'
         });
+        
         const responseJsonurl2 = await responseurl2.json();
         for (let i in responseJsonurl2) {
           if (responseJsonurl2[i].user_id === id) {

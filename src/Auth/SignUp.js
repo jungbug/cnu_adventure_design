@@ -14,27 +14,30 @@ const SignUp = ({ onNavigateToLogin }) => {
       return;
     }
 
-    const response = await fetch(
-      api_uri + '/api/v1/user/register',
+    console.log(email, password, name)
+    const response = await fetch("https://278e-168-188-130-181.ngrok-free.app/team3/register",
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_name: name,
           user_id: email,
           user_pw: password,
+          user_name: name,
+          log: []
         }),
-      },
+      }, 
     );
 
     if (response.status === 200) {
+      console.log('성공');
       onNavigateToLogin();
       return response;
     } else {
       console.log('실패');
     }
+
   };
 
   return (
