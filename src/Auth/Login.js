@@ -11,6 +11,9 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
   const [loginFailed, setLoginFailed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  AsyncStorage.removeItem('accessToken');
+  AsyncStorage.removeItem('userId');
+
   const saveData = async (data, id) => {
     try {
       await AsyncStorage.setItem('accessToken', data);
@@ -57,13 +60,17 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
         
         const responseJsonurl2 = await responseurl2.json();
         for (let i in responseJsonurl2) {
-          if (responseJsonurl2[i].user_id === id) {
-            saveData(responseJson.access_token, responseJsonurl2[i].user_name);
+          if (responseJsonurl2[i].user_id === id && responseJsonurl2[i].user_pw === pw) {
+            onLogin(tokenResult);
+            // saveData(responseJson.access_token, responseJsonurl2[i].user_name);
+          }else{
+            setLoginFailed(true);
           }
         }
         const tokenResult = await getData();
-        if (tokenResult !== undefined) {
-          onLogin(tokenResult);
+        console.log(tokenResult)
+        if (tokenResult[0] !== undefined || tokenResult[0] == null) {
+          // onLogin(tokenResult);
           setLoginFailed(false);
         } else {
           setLoginFailed(true);

@@ -6,8 +6,6 @@ import Login from './src/Auth/Login';
 import Home from './src/Home/Home';
 import Photo from './src/Photo/Photo';
 import Photo_Analysis from './src/Photo/Photo_Analysis';
-import Video from './src/Video/Video';
-import Video_Analysis from './src/Video/Video_Analysis';
 import More from './src/More/More';
 
 export default function App() {
@@ -32,10 +30,6 @@ export default function App() {
     setActiveTab('photo_analysis');
     setShowNavigationBar(true);
   };
-  const navigateToVideoAnalysis = () => {
-    setActiveTab('video_analysis');
-    setShowNavigationBar(true);
-  };
   const navigateToPhoto = () => {
     setActiveTab('photo');
     setShowNavigationBar(true);
@@ -58,59 +52,49 @@ export default function App() {
   const renderPage = () => {
     switch (activeTab) {
       case 'home':
-        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} navigateToVideoAnalysis={navigateToVideoAnalysis} />;
+        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} />;
       case 'photo':
         return <Photo />;
       case 'signUp':
         return <SignUp onNavigateToLogin={navigateToLogin} />;
       case 'login':
         return <Login onLogin={navigateToHome} onNavigateToSignUp={navigateToSignUp} />;
-      case 'video':
-        return <Video />;
       case 'more':
         return <More onNavigateToHome={navigateToHome} />;
       case 'photo_analysis':
         return <Photo_Analysis onNavigateToPhoto={navigateToPhoto} />;
-      case 'video_analysis':
-        return <Video_Analysis />;
       default:
-        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} navigateToVideoAnalysis={navigateToVideoAnalysis} />;
+        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} />;
     }
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <View style={styles.content}>{renderPage()}</View>
-      {showNavigationBar && (
-        <View style={styles.tabBar}>
-          <TouchableOpacity
-            style={styles.tabItem}
-            onPress={() => setActiveTab('home')}
-          >
-            <Ionicons name="home-outline" size={24} color={activeTab === 'home' ? '#000' : '#c0c0c0'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.tabItem}
-            onPress={() => setActiveTab('photo')}
-          >
-            <FontAwesome5 name="camera" size={24} color={activeTab === 'photo' ? '#000' : '#c0c0c0'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.tabItem}
-            onPress={() => setActiveTab('video')}
-          >
-            <FontAwesome5 name="dumbbell" size={24} color={activeTab === 'video' ? '#000' : '#c0c0c0'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.tabItem}
-            onPress={() => setActiveTab('more')}
-          >
-            <FontAwesome5 name="chart-line" size={24} color={activeTab === 'more' ? '#000' : '#c0c0c0'} />
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
+    <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+    <View style={styles.content}>{renderPage()}</View>
+    {showNavigationBar && (
+      <View style={styles.tabBar}>
+        <TouchableOpacity
+          style={styles.tabItem}
+          onPress={() => setActiveTab('home')}
+        >
+          <Ionicons name="home-outline" size={24} color={activeTab === 'home' ? '#000' : '#c0c0c0'} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.tabItem}
+          onPress={() => setActiveTab('photo')}
+        >
+          <FontAwesome5 name="camera" size={24} color={activeTab === 'photo' ? '#000' : '#c0c0c0'} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.tabItem}
+          onPress={() => setActiveTab('more')}
+        >
+          <FontAwesome5 name="scroll" size={24} color={activeTab === 'more' ? '#000' : '#c0c0c0'} />
+        </TouchableOpacity>
+      </View>
+    )}
+  </View>
   );
 }
 
