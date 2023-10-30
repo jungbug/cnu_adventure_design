@@ -13,5 +13,11 @@
 <img src="https://img.shields.io/badge/visualstudio-007ACC?style=for-the-badge&logo=visualstudio&logoColor=white"> <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"> <img src="https://img.shields.io/badge/macos-000000?style=for-the-badge&logo=macos&logoColor=white">
 
 
-
-
+You can install them using the following command:
+```
+yarn
+```
+and 
+```
+yarn expo start
+```
