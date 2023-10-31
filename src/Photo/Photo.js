@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
 
 export default function Photo() {
+  const [isLoading, setIsLoading] = useState(false);
   const getData = async () => {
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
@@ -11,6 +12,11 @@ export default function Photo() {
       console.error('Error getting data:', error);
     }
   };
+
+  const goToDetailsScreen = () => {
+    navigation.navigate('Details');
+  };
+
   const cameraRef = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
 
@@ -29,22 +35,35 @@ export default function Photo() {
   };
 
   const uploadPhoto = async (photo) => {
+    console.log(photo)
     const data = new FormData();
+    
     data.append('photo', {
       uri: photo.uri,
       type: 'image/jpeg',
       name: 'photo.jpg',
     });
-
+    
     try {
-      const response = await fetch('http://your-server-url/predict', {
+      const response = await fetch('https://bad2-106-101-131-62.ngrok-free.app/predict/image', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
         body: data,
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log(result);
+        try {
+          result["result"].foreach((item) => {
+            console.log(item);
+          })
+          foodlist(result)
+        } catch (error) {
+          Alert.alert("분석된 결과가 없습니다 사진을 다시 찍어주세요.")
+        }
         // 예측 결과 처리
       } else {
         Alert.alert('Error', 'Failed to upload photo');
@@ -96,3 +115,8 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
   },
 });
+
+export const foodlist = (result) => {
+  let foodlist = result["result"]
+  return foodlist
+}

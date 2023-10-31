@@ -10,9 +10,8 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [nameResult, setNameResult] = useState('테스트');
 
-  AsyncStorage.removeItem('accessToken');
-  AsyncStorage.removeItem('userId');
 
   const saveData = async (data, id) => {
     try {
@@ -40,8 +39,7 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
 
     setIsLoading(true);
 
-    const url = "https://278e-168-188-130-181.ngrok-free.app/team3/login";
-    const url2 = api_uri + `/team3/login`;
+    const url = "https://63e6-45-64-145-154.ngrok-free.app"+"/team3/login"
 
     try {
       const response = await fetch(url, {
@@ -62,14 +60,13 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
         for (let i in responseJsonurl2) {
           if (responseJsonurl2[i].user_id === id && responseJsonurl2[i].user_pw === pw) {
             onLogin(tokenResult);
-            // saveData(responseJson.access_token, responseJsonurl2[i].user_name);
+            saveData(responseJsonurl2[i].user_id, responseJsonurl2[i].user_name);
           }else{
             setLoginFailed(true);
           }
         }
         const tokenResult = await getData();
-        console.log(tokenResult)
-        if (tokenResult[0] !== undefined || tokenResult[0] == null) {
+        if (tokenResult[0] !== undefined || tokenResult[0] !== null) {
           // onLogin(tokenResult);
           setLoginFailed(false);
         } else {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { api_uri } from '@env';
 
 const SignUp = ({ onNavigateToLogin }) => {
@@ -15,7 +15,7 @@ const SignUp = ({ onNavigateToLogin }) => {
     }
 
     console.log(email, password, name)
-    const response = await fetch("https://278e-168-188-130-181.ngrok-free.app/team3/register",
+    const response = await fetch("https://63e6-45-64-145-154.ngrok-free.app"+"/team3/register",
       {
         method: 'POST',
         headers: {
@@ -30,11 +30,14 @@ const SignUp = ({ onNavigateToLogin }) => {
       }, 
     );
 
-    if (response.status === 200) {
+    const responsetext = await response.text();
+
+    if (response.status === 200 && responsetext === '확인이요') {
       console.log('성공');
       onNavigateToLogin();
       return response;
     } else {
+      Alert.alert('회원가입 실패', '이미 존재하는 아이디입니다.');
       console.log('실패');
     }
 

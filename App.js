@@ -44,6 +44,11 @@ export default function App() {
     setShowNavigationBar(false);
   };
 
+  const navigatetoPhotoEdit = () => {
+    setActiveTab('photo_edit');
+    setShowNavigationBar(false);
+  };
+
   const navigateToLogin = () => {
     setActiveTab('login');
     setShowNavigationBar(false);
@@ -63,6 +68,8 @@ export default function App() {
         return <More onNavigateToHome={navigateToHome} />;
       case 'photo_analysis':
         return <Photo_Analysis onNavigateToPhoto={navigateToPhoto} />;
+      case 'photo_edit':
+        return <Photo_Edit onNavigateToPhotoEdit={navigateToPhotoEdit} />;
       default:
         return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} />;
     }

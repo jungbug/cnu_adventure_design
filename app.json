@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "healthwatch_oss",
-    "slug": "healthwatch_oss",
+    "name": "CookMate_oss",
+    "slug": "CookMate_oss",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
