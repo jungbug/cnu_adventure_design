@@ -6,6 +6,7 @@ import Login from './src/Auth/Login';
 import Home from './src/Home/Home';
 import Photo from './src/Photo/Photo';
 import Photo_Analysis from './src/Photo/Photo_Analysis';
+import Photo_Edit from './src/Photo/Photo_Edit';
 import More from './src/More/More';
 
 export default function App() {
@@ -45,7 +46,7 @@ export default function App() {
   };
 
   const navigatetoPhotoEdit = () => {
-    setActiveTab('photo_edit');
+    setActiveTab('Photo_Edit');
     setShowNavigationBar(false);
   };
 
@@ -57,7 +58,7 @@ export default function App() {
   const renderPage = () => {
     switch (activeTab) {
       case 'home':
-        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} />;
+        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} onNavigateToPhotoEdit={navigatetoPhotoEdit}/>;
       case 'photo':
         return <Photo />;
       case 'signUp':
@@ -68,10 +69,10 @@ export default function App() {
         return <More onNavigateToHome={navigateToHome} />;
       case 'photo_analysis':
         return <Photo_Analysis onNavigateToPhoto={navigateToPhoto} />;
-      case 'photo_edit':
-        return <Photo_Edit onNavigateToPhotoEdit={navigateToPhotoEdit} />;
+      case 'Photo_Edit':
+        return <Photo_Edit onNavigateToPhotoEdit={navigatetoPhotoEdit} />;
       default:
-        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} />;
+        return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} onNavigateToPhotoEdit={navigatetoPhotoEdit}/>;
     }
   };
 

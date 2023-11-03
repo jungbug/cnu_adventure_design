@@ -1,25 +1,82 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
-import { BarChart, XAxis, YAxis, Grid } from 'react-native-svg-charts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL,API_KEY,api_uri  } from '@env';
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
-const FOOD = '샐러드';
 
 const Photo_Analysis = ({ onNavigateToPhoto }) => {
+  const [proteinData, setProteinData] = useState([1, 1, 1, 1]);
+  const [foodName, setFoodName] = useState(''); 
+  const [weekproteinData, setWeekProteinData] = useState([1, 1, 1, 1]);
+  const [accessToken, setAccessToken] = useState('');
+
+  useEffect(() => {
+    AsyncStorage.getItem('foodName')
+      .then((value) => {
+        if (value) {
+          setFoodName(value);
+          init(value);
+        } else {
+          setFoodName('');
+          init('');
+        }
+      })
+      .catch((error) => {
+        console.error('Error getting data:', error);
+        setFoodName('');
+        init('');
+      });
+  }, []);
+
+
   const getData = async () => {
     try {
-      const accessToken = await AsyncStorage.getItem('accessToken');
-      console.log('accessToken:', accessToken);
+      const accessTokenValue = await AsyncStorage.getItem('accessToken');
+
+      return [accessTokenValue];
     } catch (error) {
       console.error('Error getting data:', error);
+      return [null, null];
     }
   };
+  useEffect(() => {
+    getData().then(([token]) => {
+      setAccessToken(token);
+    });
+  }, []);
 
-  const proteinData = [1, 2, 3, 4]; // 샘플데이터
-  const labels = ['칼로리', '단백질', '탄수화물', '지방']; // x축 라벨
 
-  // y축 눈금 계산
-  const maxData = Math.max(...proteinData);
-  const yTicks = Array.from({ length: 10 }, (_, i) => i * (maxData / 4));
+  const init = async (foodName) => {
+    try {
+      let flag = true
+      function composeUnicode(combined) {
+        return combined.normalize('NFC');
+      }
+      var composed = composeUnicode(foodName);
+      const response = await (await fetch(`${API_URL}/api/${API_KEY}/I2790/json/1/1000/DESC_KOR=${composed}`)).json();
+      let fetchedProteinData = [1, 1, 1, 1];
+      for (let item of response.I2790.row) {
+        if (item.DESC_KOR === foodName) {
+          
+          if(item.NUTR_CONT1 === "" || item.NUTR_CONT2 === "" || item.NUTR_CONT3 === "" || item.NUTR_CONT4 === ""){
+            return;
+          }
+          fetchedProteinData = [item.NUTR_CONT1, item.NUTR_CONT2, item.NUTR_CONT4, item.NUTR_CONT3];
+          flag = false;
+          break;
+        }
+      }
+      if (flag) {
+        
+        fetchedProteinData = [response.I2790.row[0].NUTR_CONT1, response.I2790.row[0].NUTR_CONT2, response.I2790.row[0].NUTR_CONT4, response.I2790.row[0].NUTR_CONT3];
+      }
+      setProteinData(fetchedProteinData);
+    } catch (e) {
+      console.log("데이터가 없습니다");
+    }
+  };
+  
+
 
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
@@ -30,38 +87,17 @@ const Photo_Analysis = ({ onNavigateToPhoto }) => {
         <Text style={styles.text}>식품분석</Text>
       </View>
 
-
       <View style={styles.secondContainer}>
-        <Text style={styles.middleText}>{FOOD}</Text>
+        <Text style={styles.middleText}>{foodName}</Text>
       </View>
 
       <View style={styles.thirdContainer}>
-        {/* 단백질 데이터를 이용한 BarChart */}
-        <BarChart
-          style={{ height: 250, width: SCREEN_WIDTH * 0.8, alignSelf: 'center' }}
-          data={proteinData}
-          svg={{ fill: '#50a5ff' }}
-          contentInset={{ top: 20, bottom: 20 }}
-          spacingInner={0.4}
-          yMin={0} // y축 최솟값을 0으로 설정
-        >
-
-        </BarChart>
-        <XAxis
-          style={{ marginHorizontal: 30 }}
-          data={proteinData}
-          formatLabel={(value, index) => labels[index]}
-          contentInset={{ left: 20, right: 20 }} // 라벨과 그래프 사이의 간격을 조절
-          svg={{ fontSize: 12, fill: 'black' }}
-        />
-        {/* <YAxis
-          style={{ position: 'absolute', top: -20, bottom: 140, left: 10 }}
-          data={yTicks} // 수정된 yTicks를 사용하여 y축 눈금 설정
-          formatLabel={(value) => `${value.toFixed(0)}g`} // 소수점 1자리까지 표시
-          svg={{ fontSize: 10, fill: 'black' }}
-          contentInset={{ top: 20, bottom: 20 }}
-          numberOfTicks={5}
-        /> */}
+        <View style={styles.nutritionInfo}>
+          <NutritionInfo label="칼로리" value={proteinData[0] + "kcal"} />
+          <NutritionInfo label="탄수화물" value={proteinData[1] + "g"} />
+          <NutritionInfo label="지방" value={proteinData[2] + "g"} />
+          <NutritionInfo label="단백질" value={proteinData[3] + "g"} />
+        </View>
       </View>
 
       <View style={styles.fourthContainer}>
@@ -69,35 +105,38 @@ const Photo_Analysis = ({ onNavigateToPhoto }) => {
       </View>
 
       <View style={styles.fifthContainer}>
-        {/* 주간 데이터를 이용한 BarChart */}
-        <BarChart
-          style={{ height: 250, width: SCREEN_WIDTH * 0.8, alignSelf: 'center' }}
-          data={proteinData.map((value) => value * 2)} // 샘플데이터의 값에 2를 곱해 임의의 주간 데이터 생성
-          svg={{ fill: '#5f4ffe' }}
-          contentInset={{ top: 20, bottom: 20 }}
-          spacingInner={0.4}
-          yMin={0} // y축 최솟값을 0으로 설정
-        >
-        </BarChart>
-        <XAxis
-          style={{ marginHorizontal: 30 }}
-          data={proteinData}
-          formatLabel={(value, index) => labels[index]}
-          contentInset={{ left: 20, right: 20 }} // 라벨과 그래프 사이의 간격을 조절
-          svg={{ fontSize: 12, fill: 'black' }}
-        />
-        {/* <YAxis
-          style={{ position: 'absolute', top: -20, bottom: 140, left: 10 }}
-          data={yTicks} // 수정된 yTicks를 사용하여 y축 눈금 설정
-          formatLabel={(value) => `${value.toFixed(0)}g`} // 소수점 1자리까지 표시
-          svg={{ fontSize: 10, fill: 'black' }}
-          contentInset={{ top: 20, bottom: 20 }}
-          numberOfTicks={5}
-        /> */}
+        <View style={styles.nutritionInfo2}>
+          <NutritionInfo2 label="칼로리" value={weekproteinData[0] + " kcal"} />
+          <NutritionInfo2 label="탄수화물" value={weekproteinData[1] + "g"} />
+          <NutritionInfo2 label="지방" value={weekproteinData[2] + "g"} />
+          <NutritionInfo2 label="단백질" value={weekproteinData[3] + "g"} />
+        </View>
+
       </View>
     </ScrollView>
   );
 };
+
+const NutritionInfo = ({ label, value }) => (
+  <View style={styles.nutritionInfoItem}>
+    <View style={styles.nutritionInfoItemLabel}>
+      <Text style={styles.nutritionLabel}>{label}</Text>
+    </View>
+    <View style={styles.nutritionInfoItemValue}>
+      <Text style={styles.nutritionValue}>{value}</Text>
+    </View>
+  </View>
+);
+const NutritionInfo2 = ({ label, value }) => (
+  <View style={styles.nutritionInfoItem}>
+    <View style={styles.nutritionInfoItemLabel}>
+      <Text style={styles.nutritionLabel}>{label}</Text>
+    </View>
+    <View style={styles.nutritionInfoItemValue}>
+      <Text style={styles.nutritionValue2}>{value}</Text>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -125,6 +164,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignSelf: 'center',
+    padding: 20,
   },
   fourthContainer: {
     flex: 0.1,
@@ -139,6 +179,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignSelf: 'center',
+    padding: 20,
   },
   text: {
     fontSize: 16,
@@ -153,6 +194,37 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: 'black',
+  },
+  nutritionInfo: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  nutritionInfoItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 12,
+    alignItems: 'center',
+  },
+  nutritionInfoItemLabel: {
+    flex: 1,
+  },
+  nutritionInfoItemValue: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  nutritionLabel: {
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+  nutritionValue: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#e8594e',
+  },
+  nutritionValue2: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#d61e11',
   },
 });
 

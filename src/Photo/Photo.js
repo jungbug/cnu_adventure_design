@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
+import { photo_uri } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Photo() {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +47,7 @@ export default function Photo() {
     });
     
     try {
-      const response = await fetch('https://bad2-106-101-131-62.ngrok-free.app/predict/image', {
+      const response = await fetch('https://0bda-182-226-41-77.ngrok-free.app/predict/image', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -57,11 +59,14 @@ export default function Photo() {
         const result = await response.json();
         console.log(result);
         try {
-          result["result"].foreach((item) => {
-            console.log(item);
-          })
-          foodlist(result)
+          const input = result["result"];
+          const modifiedInput = input.map(item => item.replace(/"/g, ''));
+          const output = modifiedInput.join(', ');
+          const imagedecode = result["image"]
+          await AsyncStorage.setItem('foodlist', output);
+          await AsyncStorage.setItem('YoloImage', imagedecode);
         } catch (error) {
+          console.log("2",AsyncStorage.getItem('foodlist'))
           Alert.alert("분석된 결과가 없습니다 사진을 다시 찍어주세요.")
         }
         // 예측 결과 처리
@@ -115,8 +120,3 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
   },
 });
-
-export const foodlist = (result) => {
-  let foodlist = result["result"]
-  return foodlist
-}

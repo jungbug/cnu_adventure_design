@@ -9,7 +9,7 @@ const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const Stack = createStackNavigator();
 
-const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, navigateToVideoAnalysis }) => {
+const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit }) => {
   const [nameResult, setNameResult] = useState('');
   const [weekproteinData, setWeekProteinData] = useState([1, 1, 1, 1]);
   const [accessToken, setAccessToken] = useState('');
@@ -34,14 +34,17 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, navigateToVideoAnalys
   useEffect(() => {
     getData().then(([token, name]) => {
       setAccessToken(token);
+      console.log(name)
       setNameResult(name);
+      console.log(nameResult)
     });
   }, []);
 
   useEffect(() => {
     const fetchlogData = async () => {
       try {
-        const url = "https://63e6-45-64-145-154.ngrok-free.app" + "/team3/getlog";
+        // const url = api_uri + "/team3/getlog";
+        const url = "https://b9ea-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -56,7 +59,7 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, navigateToVideoAnalys
 
         if (response.status === 200) {
           const responseJson = await response.json();
-          console.log('주간 데이터 가져오기 성공', responseJson);
+          console.log('주간 데이터 가져오기 성공');
           setData(responseJson);
         } else {
           console.error('주간 데이터 가져오기 실패:', response.status);
@@ -113,7 +116,7 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, navigateToVideoAnalys
             style={styles.rectangleFood}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToVideoAnalysis}>
+        <TouchableOpacity onPress={onNavigateToPhotoEdit}>
           <Image
             source={require('../../assets/log.png')}
             style={styles.rectangleVideo}
@@ -130,7 +133,6 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, navigateToVideoAnalys
             </Text>
             <Text style={[styles.third_greeting,]}>님의 주간분석</Text>
             <View style={{ marginTop: -SCREEN_HEIGHT * 0.272512, flexDirection: 'row', alignItems: 'center' }}>
-
             </View>
           </View>
           <Text style={[styles.nut, { color: '#d61e11' }]}>   전에 먹었던 요리들</Text>

@@ -15,7 +15,10 @@ const SignUp = ({ onNavigateToLogin }) => {
     }
 
     console.log(email, password, name)
-    const response = await fetch("https://63e6-45-64-145-154.ngrok-free.app"+"/team3/register",
+
+    const url = "https://b9ea-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/register"
+    
+    const response = await fetch(url,
       {
         method: 'POST',
         headers: {
