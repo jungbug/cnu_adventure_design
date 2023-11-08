@@ -21,3 +21,8 @@ and
 ```
 yarn expo start
 ```
+
+백엔드 인퍼런스 서버 및 yolo v8 학습 코드 바로가기 <a href="https://github.com/jungbug/cnu_adventure_design_yoloV8_inference_server">cnu_adventure_design_yoloV8_inference_server<a>
+
+백엔드 로그인 시스템 및 기록 코드 바로가기 <a href="https://github.com/jungbug/cnu_adventure_design_backend">cnu_adventure_design_backend<a>
+
