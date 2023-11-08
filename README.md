@@ -12,6 +12,15 @@
 ### Development environment
 <img src="https://img.shields.io/badge/visualstudio-007ACC?style=for-the-badge&logo=visualstudio&logoColor=white"> <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"> <img src="https://img.shields.io/badge/macos-000000?style=for-the-badge&logo=macos&logoColor=white">
 
+<br/>  
+| 이름 | 소속 |
+| --- | --- |
+| 정성윤(<b>팀장</b>/개발자, FE, BE, ML) | 충남대학교 인공지능학과 | 
+| 구민규(개발자, FE) | 충남대학교 인공지능학과 | 
+| 이주형(개발자, FE) | 충남대학교 인공지능학과 | 
+| 김한주(개발자, FE) | 충남대학교 인공지능학과 | 
+| 유동완(개발자, FE) | 충남대학교 인공지능학과 | 
+<br/>  
 
 You can install them using the following command:
 ```
@@ -22,7 +31,9 @@ and
 yarn expo start
 ```
 
-### 백엔드 인퍼런스 서버 및 yolo v8 학습 코드 바로가기 <a href="https://github.com/jungbug/cnu_adventure_design_yoloV8_inference_server">cnu_adventure_design_yoloV8_inference_server<a>
+### 백엔드 인퍼런스 서버 및 yolo v8 학습 코드 바로가기 
+<a href="https://github.com/jungbug/cnu_adventure_design_yoloV8_inference_server">cnu_adventure_design_yoloV8_inference_server<a>
 
-### 백엔드 로그인 시스템 및 기록 코드 바로가기 <a href="https://github.com/jungbug/cnu_adventure_design_backend">cnu_adventure_design_backend<a>
+### 백엔드 로그인 시스템 및 기록 코드 바로가기 
+<a href="https://github.com/jungbug/cnu_adventure_design_backend">cnu_adventure_design_backend<a>
 
