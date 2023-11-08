@@ -13,6 +13,7 @@
 <img src="https://img.shields.io/badge/visualstudio-007ACC?style=for-the-badge&logo=visualstudio&logoColor=white"> <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"> <img src="https://img.shields.io/badge/macos-000000?style=for-the-badge&logo=macos&logoColor=white">
 
 <br/>  
+
 | 이름 | 소속 |
 | --- | --- |
 | 정성윤(<b>팀장</b>/개발자, FE, BE, ML) | 충남대학교 인공지능학과 | 
