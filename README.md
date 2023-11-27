@@ -23,6 +23,8 @@
 | 유동완(개발자, FE) | 충남대학교 인공지능학과 | 
 <br/>  
 
+![진짜 gpt 추가 완성](https://github.com/jungbug/cnu_adventure_design/assets/67012995/fd802c05-54aa-4670-a03f-9e5db42d754a)
+
 You can install them using the following command:
 ```
 yarn
