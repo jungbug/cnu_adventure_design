@@ -40,7 +40,7 @@ const Login = ({ onLogin, onNavigateToSignUp }) => {
     setIsLoading(true);
 
     // const url = api_uri+"/team3/login"
-    const url = "https://b9ea-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/login"
+    const url = "https://7fa5-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/login"
     
     try {
       const response = await fetch(url, {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   button: {
-    backgroundColor: '#50a5ff',
+    backgroundColor: '#AEC670',
     paddingVertical: 12,
     paddingHorizontal: 80,
     borderRadius: 20,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: 'white',
-    borderColor: '#50a5ff',
+    borderColor: '#AEC670',
     borderWidth: 2,
     paddingVertical: 12,
     paddingHorizontal: 72,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   signUpButtonText: {
-    color: '#50a5ff',
+    color: '#AEC670',
   },
   icon: {
     width: 300,

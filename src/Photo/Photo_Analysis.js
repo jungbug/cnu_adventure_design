@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL,API_KEY,api_uri  } from '@env';
+import { API_URL,API_KEY, api_uri  } from '@env';
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const Photo_Analysis = ({ onNavigateToPhoto }) => {
@@ -21,6 +21,7 @@ const Photo_Analysis = ({ onNavigateToPhoto }) => {
           init('');
         }
       })
+      
       .catch((error) => {
         console.error('Error getting data:', error);
         setFoodName('');
@@ -47,17 +48,18 @@ const Photo_Analysis = ({ onNavigateToPhoto }) => {
 
 
   const init = async (foodName) => {
+    foodName = "치즈 오믈렛"
     try {
       let flag = true
-      function composeUnicode(combined) {
-        return combined.normalize('NFC');
-      }
-      var composed = composeUnicode(foodName);
-      const response = await (await fetch(`${API_URL}/api/${API_KEY}/I2790/json/1/1000/DESC_KOR=${composed}`)).json();
+      // function composeUnicode(combined) {
+      //   return combined.normalize('NFC');
+      // }
+      // var composed = composeUnicode(foodName);
+      // console.log(API_URL, APIKEY, foodName)
+      const response = await (await fetch(`${API_URL}/api/${API_KEY}/I2790/json/1/1000/DESC_KOR=${foodName}`)).json();
       let fetchedProteinData = [1, 1, 1, 1];
       for (let item of response.I2790.row) {
         if (item.DESC_KOR === foodName) {
-          
           if(item.NUTR_CONT1 === "" || item.NUTR_CONT2 === "" || item.NUTR_CONT3 === "" || item.NUTR_CONT4 === ""){
             return;
           }
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
   middleText: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#50a5ff',
+    color: '#778D45',
   },
   secondmiddleText: {
     fontSize: 30,
@@ -219,12 +221,12 @@ const styles = StyleSheet.create({
   nutritionValue: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: '#e8594e',
+    color: '#AEC09A',
   },
   nutritionValue2: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: '#d61e11',
+    color: '#AEC670',
   },
 });
 

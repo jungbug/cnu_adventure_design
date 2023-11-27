@@ -60,7 +60,7 @@ export default function App() {
       case 'home':
         return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} onNavigateToPhotoEdit={navigatetoPhotoEdit}/>;
       case 'photo':
-        return <Photo />;
+        return <Photo onNavigateToPhotoEdit={navigatetoPhotoEdit}/>;
       case 'signUp':
         return <SignUp onNavigateToLogin={navigateToLogin} />;
       case 'login':
@@ -68,9 +68,9 @@ export default function App() {
       case 'more':
         return <More onNavigateToHome={navigateToHome} />;
       case 'photo_analysis':
-        return <Photo_Analysis onNavigateToPhoto={navigateToPhoto} />;
+        return <Photo_Analysis onNavigateToPhoto={navigateToPhoto}/>;
       case 'Photo_Edit':
-        return <Photo_Edit onNavigateToPhotoEdit={navigatetoPhotoEdit} />;
+        return <Photo_Edit onNavigateToPhotoEdit={navigatetoPhotoEdit} onNavigateToHomePage={navigateToHome}/>;
       default:
         return <Home onNavigateToMore={navigateToMore} navigateToPhotoAnalysis={navigateToPhotoAnalysis} onNavigateToPhotoEdit={navigatetoPhotoEdit}/>;
     }

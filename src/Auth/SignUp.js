@@ -15,8 +15,8 @@ const SignUp = ({ onNavigateToLogin }) => {
     }
 
     console.log(email, password, name)
-
-    const url = "https://b9ea-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/register"
+    // const url = api_uri+"/team3/register"
+    const url = "https://7fa5-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/register"
     
     const response = await fetch(url,
       {
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     alignSelf: 'flex-start',
     marginLeft: 20,
-    color: '#50a5ff',
+    color: '#AEC670',
 
   },
   input: {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   button: {
-    backgroundColor: '#50a5ff',
+    backgroundColor: '#AEC670',
     paddingVertical: 15,
     paddingHorizontal: 100,
     borderRadius: 20,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loginButtonText: {
-    color: '#50a5ff',
+    color: '#AEC670',
     fontSize: 16,
     fontWeight: 'bold',
   },

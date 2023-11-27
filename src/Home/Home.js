@@ -43,8 +43,9 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
   useEffect(() => {
     const fetchlogData = async () => {
       try {
+        const url = "https://7fa5-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
         // const url = api_uri + "/team3/getlog";
-        const url = "https://b9ea-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
+        // const url = "https://8ec7-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -96,7 +97,7 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
       <View style={[styles.firstContainer]}>
         <View style={styles.contentContainer}>
           <Text style={[styles.greeting, styles.text]}>안녕하세요</Text>
-          <Text style={[styles.username, styles.text, { color: '#fb8d84' }]}>
+          <Text style={[styles.username, styles.text, { color: '#AEC09A' }]}>
             {nameResult}
           </Text>
           <Text style={[styles.greeting, styles.text]}>님!</Text>
@@ -128,14 +129,14 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
       <View style={[styles.thirdContainer]}>
         <ScrollView>
           <View style={styles.contentContainer}>
-            <Text style={[styles.third_username, { color: '#fb8d84' }]}>
+            <Text style={[styles.third_username, { color: '#AEC09A' }]}>
               {nameResult}
             </Text>
             <Text style={[styles.third_greeting,]}>님의 주간분석</Text>
             <View style={{ marginTop: -SCREEN_HEIGHT * 0.272512, flexDirection: 'row', alignItems: 'center' }}>
             </View>
           </View>
-          <Text style={[styles.nut, { color: '#d61e11' }]}>   전에 먹었던 요리들</Text>
+          <Text style={[styles.nut, { color: '#778D45' }]}>   전에 먹었던 요리들</Text>
 
           <ScrollView pagingEnabled horizontal style={styles.recFood} showsHorizontalScrollIndicator={false}>
             <View style={styles.recBlock} >
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   textItem: {
     fontSize: SCREEN_HEIGHT * SCREEN_WIDTH * 0.000076,
     fontWeight: 'bold',
-    color: '#e8594e',
+    color: '#AEC670',
     marginTop: SCREEN_HEIGHT * 0.012,
     marginLeft: SCREEN_WIDTH * 0.0410,
     marginRight: SCREEN_WIDTH * 0.0410,

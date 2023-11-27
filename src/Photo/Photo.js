@@ -4,7 +4,7 @@ import { Camera } from 'expo-camera';
 import { photo_uri } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Photo() {
+export default function Photo({navigatetoPhotoEdit}) {
   const [isLoading, setIsLoading] = useState(false);
   const getData = async () => {
     try {
@@ -13,10 +13,6 @@ export default function Photo() {
     } catch (error) {
       console.error('Error getting data:', error);
     }
-  };
-
-  const goToDetailsScreen = () => {
-    navigation.navigate('Details');
   };
 
   const cameraRef = useRef(null);
@@ -47,7 +43,7 @@ export default function Photo() {
     });
     
     try {
-      const response = await fetch('https://0bda-182-226-41-77.ngrok-free.app/predict/image', {
+      const response = await fetch('https://1ed9-106-101-2-211.ngrok-free.app/predict/image', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -57,16 +53,17 @@ export default function Photo() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         try {
           const input = result["result"];
           const modifiedInput = input.map(item => item.replace(/"/g, ''));
           const output = modifiedInput.join(', ');
+          Alert.alert("사진 분석이 완료되었습니다.")
           const imagedecode = result["image"]
           await AsyncStorage.setItem('foodlist', output);
           await AsyncStorage.setItem('YoloImage', imagedecode);
         } catch (error) {
-          console.log("2",AsyncStorage.getItem('foodlist'))
+          console.log("2",await AsyncStorage.getItem('foodlist'))
           Alert.alert("분석된 결과가 없습니다 사진을 다시 찍어주세요.")
         }
         // 예측 결과 처리

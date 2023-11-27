@@ -13,29 +13,35 @@ const More = ({ route , navigation}) => {
   const [foodingredient, setFoodIngredient] = useState("")
   const [foodrecipe, setFoodRecipe] = useState("")
   const [accessToken, setAccessToken] = useState('');
+  const [YoloImage, setYoloImage] = useState('');
 
   const getData = async () => {
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
-      const food = AsyncStorage.getItem('foodName')
+      const food = await AsyncStorage.getItem('foodName')
+      const recipe = await AsyncStorage.getItem('recipe')
+      const ingredient = await AsyncStorage.getItem('ingredient')
+      const YoloImage = await AsyncStorage.getItem('YoloImage')
       console.log('accessToken:', accessToken);
-      return [accessToken, food]
+      return [accessToken, food, recipe, ingredient]
     } catch (error) {
       console.error('Error getting data:', error);
     }
   };
 
   useEffect(() => {
-    getData().then(([token, food]) => {
+    getData().then(([token, food, recipe, ingredient]) => {
       setAccessToken(token);
       setfoodname(food)
+      setFoodIngredient(ingredient)
+      setFoodRecipe(recipe)
     });
   }, []);
   useEffect(() => {
     const fetchlogData = async () => {
       try {
         // const url = api_url + "/team3/getlog";
-        const url = "https://b9ea-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
+        const url = "https://8ec7-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -62,44 +68,13 @@ const More = ({ route , navigation}) => {
     fetchlogData();
   }, [accessToken]);
 
-  let food_name = "김치볶음밥"
+  let food_name = foodname
 
+  let ingredient = foodingredient
 
-  let ingredient = 
-  `
-  밥: 1인분 기준으로 1컵
-  김치: 1컵 정도 (적당히 다진 김치)
-  돼지고기: 100g (다진 돼지고기, 선택사항)
-  양파: 1개 (작게 다진 양파)
-  달걀: 2개
-  식용유: 2~3 큰 숟가락
-  간장: 2~3 큰 숟가락
-  참기름: 1 큰 숟가락 (선택사항)
-  소금: 맛에 따라
-  후추: 맛에 따라`
+  let recipe = foodrecipe
 
-  let recipe = `
-  먼저 밥을 미리 짓고 식혀둡니다. 한두 시간 정도 식히면 좋습니다.
-
-  돼지고기가 있다면 먼저 잘게 다져서 기름이 녹을 때까지 볶아줍니다.
-  
-  기름이 나오면 다진 양파를 넣고 양파가 투명해질 때까지 볶아줍니다.
-  
-  김치를 넣고 함께 볶아줍니다. 김치가 볶음밥의 맛을 살려줍니다.
-  
-  밥을 넣고 김치와 밥이 잘 섞일 때까지 볶아줍니다.
-  
-  간장을 더해 볶음밥에 감칠맛을 더합니다.
-  
-  후추와 소금을 맛에 따라 조절합니다.
-  
-  볶음밥을 중약불에서 조금 더 볶아줍니다.
-  
-  계란을 풀어 볶음밥에 넣고 잘 섞어줍니다.
-  
-  볶음밥이 고루 섞이고 계란이 익으면 불을 끕니다.
-  
-  볶음밥을 그릇에 담고 참기름을 뿌린 뒤 바로 먹습니다.`
+  let img = YoloImage
   
 
   return (
@@ -137,7 +112,7 @@ const styles = StyleSheet.create({
     marginTop: SCREEN_HEIGHT * 0.112,
     justifyContent: "flex-start",
     fontWeight: 'bold',
-    color: "#d61e11"
+    color: "#778D45"
   },
   correction: {
     flex: 1,
@@ -149,7 +124,7 @@ const styles = StyleSheet.create({
   },
   correctionTitle: {
     fontSize: SCREEN_HEIGHT * SCREEN_WIDTH * 0.000076,
-    color: '#e8594e',
+    color: '#AEC670',
     marginTop: SCREEN_HEIGHT * 0.012,
     marginLeft: SCREEN_WIDTH * 0.05,
     marginRight: SCREEN_WIDTH * 0.05,
@@ -172,7 +147,7 @@ const styles = StyleSheet.create({
     marginBottom: SCREEN_HEIGHT * 0.012,
   },
   manualTitle: {
-    color: '#e8594e',
+    color: '#AEC670',
     fontSize: SCREEN_HEIGHT * SCREEN_WIDTH * 0.000076,
     marginTop: 15,
     marginLeft: SCREEN_WIDTH * 0.05,
