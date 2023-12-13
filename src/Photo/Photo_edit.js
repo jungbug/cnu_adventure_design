@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { photo_url,API_KEY,api_uri , OPENAI_API_KEY } from '@env';
-import { OpenAI} from "langchain/llms/openai";
-import { ChatOpenAI } from "langchain/chat_models/openai";
+import { photo_url, API_KEY, api_uri, OPENAI_API_KEY, GPT_API } from '@env';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { Constants } from 'expo-camera';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
-const Photo_Edit = ({onNavigateToHomePage}) => {
+const Photo_Edit = ({ onNavigateToHomePage }) => {
   const [food, setFood] = useState(""); // State to store the edited food name
   const [isLoading, setIsLoading] = useState(false); // State to control loading indicator
   const [accessToken, setAccessToken] = useState('');
   const [foodlist, setFoodlist] = useState("");
   const [yolo, setYolo] = useState("");
+  const [answer, setAnswer] = useState("입력 값 없음");
+  const [foodName, setFoodName] = useState("");
+  const [ingredient, setIngredient] = useState("");
+  const [recipe, setRecipe] = useState("");
 
-  const llm = new OpenAI({
-    openaiApiKey: OPENAI_API_KEY,
-    temperature: 0.7,
-  });
-
-  const chatModel = new ChatOpenAI();
-
-  const text = ""
-
-  // const llmResult = await llm.predict(text);
-
-  // const chatModelResult = await chatModel.predict(text);
 
   const getData = async () => {
     try {
@@ -32,31 +24,31 @@ const Photo_Edit = ({onNavigateToHomePage}) => {
       const foodlist = await AsyncStorage.getItem('foodlist');
       const YoloImage = await AsyncStorage.getItem("YoloImage")
       console.log(foodlist)
-      
+
       return [accessTokenValue, foodlist, YoloImage];
     } catch (error) {
       console.error('Error getting data:', error);
-      return [null, []];
+      return [null, [], ""];
     }
   };
 
   const sendData = async (foodName, ingredient, recipe) => {
-    try{
-      // const uri = api_uri
-      const uri = "https://7fa5-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app"
-      const response = await fetch(uri+'/team3/log', {
+    console.log(foodName, ingredient, recipe)
+    try {
+      const url = api_uri + '/team3/log'
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           user_id: accessToken,
-          log: [foodName,ingredient,recipe]
+          log: [foodName, ingredient, recipe]
         }),
       });
 
-    } catch(error){
-      console.log("error: ",error)
+    } catch (error) {
+      console.log("error: ", error)
     }
   }
 
@@ -68,94 +60,123 @@ const Photo_Edit = ({onNavigateToHomePage}) => {
     });
   }, []);
 
-  console.log("foodlist:",foodlist)
+  console.log("foodlist:", foodlist)
 
-  console.log("food:",food)
+  console.log("food:", food)
+
+  const prompt_text = ` 로 만들수 있는 음식 한개와 재료와 레시피 알려줘 예시를 알려줄게 앞에 ";를 붙여야 내가 파싱하기 쉬우니까 앞에 붙여줘 다른 말들은 전부다 빼고 그냥 내가 적어준 형식대로만 적어줘" 
+  ;(음식 이름)
+
+  ;(음식 재료)
+
+  ;(음식 레시피)
+  
+  앞에 ; 붙여서 적어야 내가 파싱하기 쉬워서 그리고 한국어로 해줘
+  `
 
   const changefood = (text) => {
     setFood(text)
     setFoodlist(text)
   }
+  const testTurbo = async (question) => {
+    const data = JSON.stringify({
+        "model" : "gpt-3.5-turbo",
+        "temperature": 0.5,
+        "messages": [
+            {"role": "system", "content": "You are a cook"},
+            {"role": "user", "content": question + prompt_text}
+        ],
+    });
 
-  const langchain = () => {
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              Authorization : 'Bearer '+GPT_API,
+                'content-type': 'application/json',
+            },
+            body: data,
+        });
 
-  }
+        if (!response.ok) {
+          console.log(response)
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
+    }
+};
+
+const getAnswer = () => {
+    setAnswer("입력 값 없음");
+
+    testTurbo(foodlist)
+        .then(result => {
+            setAnswer(result.choices[0].message.content);
+            console.log("answer", result)
+            console.log("0 :", result.choices[0].message.content);
+            const answer = result.choices[0].message.content
+            console.log("1:", answer.split(";")[1])
+            console.log("2:", answer.split(";")[2])
+            console.log("3:", answer.split(";")[3])
+            setFoodName(answer.split(";")[1])
+            setIngredient(answer.split(";")[2])
+            setRecipe(answer.split(";")[3])
+            console.log(foodName, ingredient, recipe)
+            AsyncStorage.setItem('gpt_answer', answer)
+            AsyncStorage.setItem('foodName', answer.split(";")[1])
+            AsyncStorage.setItem('ingredient', answer.split(";")[2])
+            AsyncStorage.setItem('recipe', answer.split(";")[3])
+
+            alert("분석이 완료되었습니다.")
+            sendData(answer.split(";")[1], answer.split(";")[2], answer.split(";")[3])
+            onNavigateToHomePage()
+        })
+        .catch(error => console.error('Error:', error));
+};
 
   // // Function to handle the submission of edited food name
   const handleSubmit = () => {
     // console.log(food)
-  //   // Set isLoading to true to show the loading indicator
+    //   // Set isLoading to true to show the loading indicator
+    getAnswer()
+    //   // Perform your server request to update the food name
+    //   // For example, you can use fetch or any other method to update the food name on the server.
+    //   // Once the update is successful, you can update the "result" array with the new food name.
 
-    let foodName = "버섯 치즈 오믈렛"
-
-    let ingredient = `계란 (2개)
-    우유 (2큰술)
-    버섯 (다진 상태로)
-    치즈 (다진 상태로)
-    양파 (다진 상태로)
-    소금 (맛에 맞게 조절)
-    식용유 (오믈렛 조리에 사용)`
-
-    let recipe = `먼저 계란 2개를 그릇에 넣고 우유 2큰술을 추가합니다. 소금을 약간 넣고 계란과 우유를 풀어주세요.
-
-    팬을 중불로 예열하고 식용유를 조금 두르세요.
-    
-    다진 양파와 다진 버섯을 팬에 넣고 볶아주세요. 양파와 버섯이 부드러워질 때까지 조리합니다.
-    
-    볶은 양파와 버섯 위에 계란과 우유 혼합물을 부은 후, 치즈를 골고루 뿌려주세요.
-    
-    오믈렛이 팬에 굳어질 때까지 중불에서 조리합니다.
-    
-    접시로 옮기고 더 치즈를 뿌려서 마무리합니다.
-    
-    따뜻하게 즐기세요.
-    `
-
-    AsyncStorage.setItem('foodName',foodName)
-    AsyncStorage.setItem('ingredient', ingredient)
-    AsyncStorage.setItem('recipe', recipe)
-
-    sendData(foodName, ingredient, recipe)
-
-    alert("분석이 완료되었습니다.")
-
-    onNavigateToHomePage()
-    
-    setIsLoading(true);
-
-
-  //   // Perform your server request to update the food name
-  //   // For example, you can use fetch or any other method to update the food name on the server.
-  //   // Once the update is successful, you can update the "result" array with the new food name.
-
-  //   // After updating the server, set isLoading back to false to hide the loading indicator
+    //   // After updating the server, set isLoading back to false to hide the loading indicator
     setIsLoading(false);
 
   };
 
-  
+
 
   return (
     <View style={styles.container}>
-          <Image
-            source={{uri : "https://user-images.githubusercontent.com/67012995/280949906-4e8ecd64-81df-466c-a433-3fc59f611c10.png"}}
-            style={styles.rectangleFood}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="음식의 재료들을 맞게 적어주세요"
-            value={foodlist}
-            onChangeText={text => changefood(text)}
-          />
-          
-          {/* <Image
+      <Image
+        style={styles.rectangleFood}
+        source={{ uri: yolo }}
+        // source={{ uri: "https://user-images.githubusercontent.com/67012995/280949906-4e8ecd64-81df-466c-a433-3fc59f611c10.png" }}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="음식의 재료들을 맞게 적어주세요"
+        value={foodlist}
+        onChangeText={text => changefood(text)}
+      />
+
+      {/* <Image
             source={yolo ? {uri : yolo } : null}
             style={styles.rectangleFood}
           /> */}
-          
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>확인</Text>
-          </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>확인</Text>
+      </TouchableOpacity>
     </View>
   );
 }

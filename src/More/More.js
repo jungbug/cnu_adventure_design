@@ -21,7 +21,7 @@ const More = ({ route , navigation}) => {
       const food = await AsyncStorage.getItem('foodName')
       const recipe = await AsyncStorage.getItem('recipe')
       const ingredient = await AsyncStorage.getItem('ingredient')
-      const YoloImage = await AsyncStorage.getItem('YoloImage')
+      console.log(food, recipe, ingredient, "112")
       console.log('accessToken:', accessToken);
       return [accessToken, food, recipe, ingredient]
     } catch (error) {
@@ -40,8 +40,7 @@ const More = ({ route , navigation}) => {
   useEffect(() => {
     const fetchlogData = async () => {
       try {
-        // const url = api_url + "/team3/getlog";
-        const url = "https://8ec7-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
+        const url = api_url + "/team3/getlog";
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -73,8 +72,6 @@ const More = ({ route , navigation}) => {
   let ingredient = foodingredient
 
   let recipe = foodrecipe
-
-  let img = YoloImage
   
 
   return (

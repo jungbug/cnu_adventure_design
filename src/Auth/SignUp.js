@@ -15,8 +15,7 @@ const SignUp = ({ onNavigateToLogin }) => {
     }
 
     console.log(email, password, name)
-    // const url = api_uri+"/team3/register"
-    const url = "https://7fa5-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/register"
+    const url = api_uri+"/team3/register"
     
     const response = await fetch(url,
       {

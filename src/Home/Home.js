@@ -15,10 +15,6 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
   const [accessToken, setAccessToken] = useState('');
   const [data, setData] = useState([]);
 
-  // const handleNavigateToMore = (itemName) => {
-  //   onNavigateToMore("more", { itemName });
-  // }
-
   const getData = async () => {
     try {
       const accessTokenValue = await AsyncStorage.getItem('accessToken');
@@ -43,9 +39,7 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
   useEffect(() => {
     const fetchlogData = async () => {
       try {
-        const url = "https://7fa5-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
-        // const url = api_uri + "/team3/getlog";
-        // const url = "https://8ec7-2406-da12-16a-fe00-a13c-a008-b335-7158.ngrok-free.app/team3/getlog"
+        const url = api_uri + "/team3/getlog";
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -79,18 +73,12 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
     });
   }, []);
 
-  let titleP = "";
-  let subP = "";
-  let titleV = "";
-  let subV = "";
-  let titleC = "";
-  let subC = "";
-  let titlePV = "";
-  let subPV = "";
-  let titleM = "";
-  let subM = "";
-
-
+  settings_navigation = (index) => {
+    AsyncStorage.setItem("foodName", data[index][0])
+    AsyncStorage.setItem("ingredient", data[index][1])
+    AsyncStorage.setItem("recipe", data[index][2])
+    onNavigateToMore()
+  }
 
   return (
     <View Style={styles.container}>
@@ -141,7 +129,7 @@ const Home = ({ onNavigateToMore, navigateToPhotoAnalysis, onNavigateToPhotoEdit
           <ScrollView pagingEnabled horizontal style={styles.recFood} showsHorizontalScrollIndicator={false}>
             <View style={styles.recBlock} >
               {data.map((item, index) => (
-                <TouchableOpacity key={index} onPress={onNavigateToMore}>
+                <TouchableOpacity key={index} onPress={() => settings_navigation(index)}>
                   <Text style={styles.textItem}>{item[0]}</Text>
                 </TouchableOpacity>
               ))}

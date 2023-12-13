@@ -43,7 +43,7 @@ export default function Photo({navigatetoPhotoEdit}) {
     });
     
     try {
-      const response = await fetch('https://1ed9-106-101-2-211.ngrok-free.app/predict/image', {
+      const response = await fetch('https://1dca-110-35-22-115.ngrok-free.app/predict/image', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -53,7 +53,7 @@ export default function Photo({navigatetoPhotoEdit}) {
 
       if (response.ok) {
         const result = await response.json();
-        // console.log(result);
+        console.log(result);
         try {
           const input = result["result"];
           const modifiedInput = input.map(item => item.replace(/"/g, ''));
